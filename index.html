@@ -1590,7 +1590,7 @@
               { parameter: "cat", payload: "1' or 1=1 --", vulnerable: false, evidence: "Safe: query parameters validated using SQL patterns." }
             ],
             xss: [
-              { parameter: "query", payload: "<script>alert(1)</script>", vulnerable: false, evidence: "Safe: parameters filtered, special symbols encoded." }
+              { parameter: "query", payload: "<script>alert(1)<\/script>", vulnerable: false, evidence: "Safe: parameters filtered, special symbols encoded." }
             ],
             ssl: {
               host: domain,
