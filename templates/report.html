@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Penetration Testing Toolkit Report</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #17202a;
+            background: #f5f7fb;
+        }
+        header {
+            padding: 24px 32px;
+            color: #ffffff;
+            background: #102a43;
+        }
+        main {
+            max-width: 1100px;
+            margin: 24px auto;
+            padding: 0 20px 36px;
+        }
+        section {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #d9e2ec;
+            border-radius: 8px;
+            background: #ffffff;
+        }
+        h1, h2 {
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #d9e2ec;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #edf2f7;
+        }
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 999px;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .Low { background: #2f855a; }
+        .Medium { background: #b7791f; }
+        .High { background: #c53030; }
+        .Critical { background: #702459; }
+        code {
+            word-break: break-word;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mini Penetration Testing Toolkit Report</h1>
+        <p>Target: {{ target_url }} | Scan Time: {{ scan_time }}</p>
+        <p>Risk Score: {{ risk_score }}/100 <span class="badge {{ risk_severity }}">{{ risk_severity }}</span></p>
+    </header>
+    <main>
+        <section>
+            <h2>URL Scan</h2>
+            <p>Status: {{ url_scan.status_code }} {{ url_scan.reason }} | Final URL: {{ url_scan.final_url }}</p>
+            <p>Server: {{ url_scan.server }}</p>
+            <p>Missing Security Headers: {{ url_scan.missing_security_headers | join(", ") or "None" }}</p>
+        </section>
+
+        <section>
+            <h2>Reconnaissance & Fingerprinting</h2>
+            <p><strong>Fingerprinted Technologies:</strong> {{ recon_scan.technologies | join(", ") or "None" }}</p>
+            <p><strong>Active Subdomains Resolved:</strong></p>
+            <table>
+                <tr><th>Subdomain</th><th>IP Address</th></tr>
+                {% for item in recon_scan.subdomains %}
+                <tr><td>{{ item.subdomain }}</td><td>{{ item.ip }}</td></tr>
+                {% else %}
+                <tr><td colspan="2" style="text-align: center; color: #718096;">No subdomains discovered</td></tr>
+                {% endfor %}
+            </table>
+        </section>
+
+        <section>
+            <h2>Port Scan Results</h2>
+            <table>
+                <tr><th>Port</th><th>Service</th><th>Status</th></tr>
+                {% for row in port_scan %}
+                <tr><td>{{ row.port }}</td><td>{{ row.service }}</td><td>{{ row.status }}</td></tr>
+                {% endfor %}
+            </table>
+        </section>
+
+        <section>
+            <h2>SQL Injection Results</h2>
+            <table>
+                <tr><th>Parameter</th><th>Payload</th><th>Status</th><th>Evidence</th><th>Severity</th></tr>
+                {% for row in sql_injection %}
+                <tr>
+                    <td>{{ row.parameter }}</td>
+                    <td><code>{{ row.payload }}</code></td>
+                    <td>{{ "Potentially Vulnerable" if row.vulnerable else "No indicator" }}</td>
+                    <td>{{ row.evidence }}</td>
+                    <td>{{ row.severity }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+
+        <section>
+            <h2>XSS Results</h2>
+            <table>
+                <tr><th>Parameter</th><th>Payload</th><th>Status</th><th>Evidence</th><th>Severity</th></tr>
+                {% for row in xss %}
+                <tr>
+                    <td>{{ row.parameter }}</td>
+                    <td><code>{{ row.payload }}</code></td>
+                    <td>{{ "Potentially Vulnerable" if row.vulnerable else "No indicator" }}</td>
+                    <td>{{ row.evidence }}</td>
+                    <td>{{ row.severity }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+
+        <section>
+            <h2>SSL Status</h2>
+            <p>Issuer: {{ ssl.issuer }}</p>
+            <p>Subject: {{ ssl.subject }}</p>
+            <p>Expiry: {{ ssl.expiry_date }} | Days Remaining: {{ ssl.days_remaining }}</p>
+            <p>TLS Version: {{ ssl.tls_version }} | Valid: {{ ssl.valid }}</p>
+            {% if ssl.error %}<p>Error: {{ ssl.error }}</p>{% endif %}
+        </section>
+
+        <section>
+            <h2>Recommendations</h2>
+            <ul>
+                {% for item in recommendations %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

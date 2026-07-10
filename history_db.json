@@ -1,0 +1,419 @@
+{
+  "Lucky": [
+    {
+      "timestamp": "2026-07-08 09:20:18",
+      "target": "https://github.com/",
+      "results": {
+        "target_url": "https://github.com/",
+        "target_host": "github.com",
+        "scan_time": "2026-07-08 09:20:18",
+        "url_scan": {
+          "target": "https://github.com/",
+          "valid": true,
+          "suspicious_indicators": [],
+          "status_code": null,
+          "reason": null,
+          "final_url": null,
+          "redirects": [],
+          "headers": {},
+          "server": "Unknown",
+          "security_headers": {},
+          "missing_security_headers": [],
+          "error": "HTTPSConnectionPool(host='github.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError(\"HTTPSConnection(host='github.com', port=443): Failed to resolve 'github.com' ([Errno 11001] getaddrinfo failed)\"))"
+        },
+        "port_scan": [
+          {
+            "port": 80,
+            "service": "http",
+            "status": "Host resolution failed"
+          },
+          {
+            "port": 443,
+            "service": "https",
+            "status": "Host resolution failed"
+          },
+          {
+            "port": 8080,
+            "service": "unknown",
+            "status": "Host resolution failed"
+          }
+        ],
+        "sql_injection": [
+          {
+            "parameter": "N/A",
+            "payload": "N/A",
+            "vulnerable": false,
+            "evidence": "No query parameters found to test safely.",
+            "severity": "Low"
+          }
+        ],
+        "xss": [
+          {
+            "parameter": "N/A",
+            "payload": "N/A",
+            "vulnerable": false,
+            "evidence": "No query parameters found to test safely.",
+            "severity": "Low"
+          }
+        ],
+        "ssl": {
+          "host": "github.com",
+          "port": 443,
+          "issuer": "Unknown",
+          "subject": "Unknown",
+          "expiry_date": "Unknown",
+          "days_remaining": null,
+          "tls_version": "Unknown",
+          "valid": false,
+          "expired": false,
+          "error": "[Errno 11001] getaddrinfo failed"
+        },
+        "risk_score": 20,
+        "risk_severity": "Low",
+        "recommendations": [
+          "Renew or replace the TLS certificate and verify certificate chains."
+        ],
+        "reports": {
+          "txt": "/output/web_report_github_com_20260708_092018.txt",
+          "html": "/output/web_report_github_com_20260708_092018.html",
+          "csv": "/output/web_report_github_com_20260708_092018.csv",
+          "json": "/output/web_report_github_com_20260708_092018.json"
+        },
+        "scan_duration": "0.1s"
+      }
+    },
+    {
+      "timestamp": "2026-07-08 09:32:14",
+      "target": "https://example.com",
+      "results": {
+        "target_url": "https://example.com",
+        "target_host": "example.com",
+        "scan_time": "2026-07-08 09:32:14",
+        "url_scan": {
+          "target": "https://example.com",
+          "valid": true,
+          "suspicious_indicators": [],
+          "status_code": 200,
+          "reason": "OK",
+          "final_url": "https://example.com/",
+          "redirects": [],
+          "headers": {
+            "Date": "Wed, 08 Jul 2026 04:02:23 GMT",
+            "Content-Type": "text/html",
+            "Transfer-Encoding": "chunked",
+            "Connection": "keep-alive",
+            "Server": "cloudflare",
+            "Last-Modified": "Wed, 01 Jul 2026 17:50:18 GMT",
+            "Allow": "GET, HEAD",
+            "Age": "9627",
+            "Cf-Cache-Status": "HIT",
+            "Content-Encoding": "gzip",
+            "CF-RAY": "a17c31705e73251f-DEL"
+          },
+          "server": "cloudflare",
+          "security_headers": {},
+          "missing_security_headers": [
+            "Content-Security-Policy",
+            "Strict-Transport-Security",
+            "X-Frame-Options",
+            "X-Content-Type-Options",
+            "Referrer-Policy",
+            "Permissions-Policy"
+          ],
+          "error": null
+        },
+        "port_scan": [
+          {
+            "port": 80,
+            "service": "http",
+            "status": "Open"
+          },
+          {
+            "port": 443,
+            "service": "https",
+            "status": "Open"
+          },
+          {
+            "port": 8080,
+            "service": "unknown",
+            "status": "Open"
+          }
+        ],
+        "sql_injection": [
+          {
+            "parameter": "N/A",
+            "payload": "N/A",
+            "vulnerable": false,
+            "evidence": "No query parameters found to test safely.",
+            "severity": "Low"
+          }
+        ],
+        "xss": [
+          {
+            "parameter": "N/A",
+            "payload": "N/A",
+            "vulnerable": false,
+            "evidence": "No query parameters found to test safely.",
+            "severity": "Low"
+          }
+        ],
+        "ssl": {
+          "host": "example.com",
+          "port": 443,
+          "issuer": "countryName=US, organizationName=SSL Corporation, commonName=Cloudflare TLS Issuing ECC CA 3",
+          "subject": "commonName=example.com",
+          "expiry_date": "2026-08-29 21:41:26 UTC",
+          "days_remaining": 52,
+          "tls_version": "TLSv1.3",
+          "valid": true,
+          "expired": false,
+          "error": null
+        },
+        "risk_score": 40,
+        "risk_severity": "Medium",
+        "recommendations": [
+          "Add missing HTTP security headers such as CSP, HSTS, and X-Frame-Options.",
+          "Close unused open ports or restrict them with a firewall."
+        ],
+        "reports": {
+          "txt": "/output/web_report_example_com_20260708_093231.txt",
+          "html": "/output/web_report_example_com_20260708_093231.html",
+          "csv": "/output/web_report_example_com_20260708_093231.csv",
+          "ppt": "/output/web_report_example_com_20260708_093231.pptx"
+        },
+        "scan_duration": "17.5s"
+      }
+    },
+    {
+      "timestamp": "2026-07-08 10:43:18",
+      "target": "https://steamrip.com/",
+      "results": {
+        "target_url": "https://steamrip.com/",
+        "target_host": "steamrip.com",
+        "scan_time": "2026-07-08 10:43:18",
+        "url_scan": {
+          "target": "https://steamrip.com/",
+          "valid": true,
+          "suspicious_indicators": [],
+          "status_code": 200,
+          "reason": "OK",
+          "final_url": "https://steamrip.com/",
+          "redirects": [],
+          "headers": {
+            "Date": "Wed, 08 Jul 2026 05:13:20 GMT",
+            "Content-Type": "text/html; charset=UTF-8",
+            "Transfer-Encoding": "chunked",
+            "Connection": "keep-alive",
+            "Server": "cloudflare",
+            "X-Powered-By": "PHP/8.3.32, PleskLin",
+            "Vary": "Accept-Encoding,Cookie",
+            "Cache-Control": "max-age=3, must-revalidate",
+            "Report-To": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=hB07J9YctYqO3X1%2FkgI9ONynpW%2FzaaOS%2BVwnUF6i1rvwCW0UOaCbXW5aCS6yDGgG63fGODFCM3NlkXSlFzWa23RYR%2Bi2ko02RfMR9IQX7Tq3w3CF%2FCNzZV1XTBR1aw%3D%3D\"}]}",
+            "X-Cache-Status": "HIT",
+            "Cf-Cache-Status": "DYNAMIC",
+            "Nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+            "Speculation-Rules": "\"/cdn-cgi/speculation\"",
+            "Content-Encoding": "gzip",
+            "CF-RAY": "a17c995cab3d0d97-DEL",
+            "alt-svc": "h3=\":443\"; ma=86400"
+          },
+          "server": "cloudflare",
+          "security_headers": {},
+          "missing_security_headers": [
+            "Content-Security-Policy",
+            "Strict-Transport-Security",
+            "X-Frame-Options",
+            "X-Content-Type-Options",
+            "Referrer-Policy",
+            "Permissions-Policy"
+          ],
+          "error": null
+        },
+        "port_scan": [
+          {
+            "port": 80,
+            "service": "http",
+            "status": "Open"
+          },
+          {
+            "port": 443,
+            "service": "https",
+            "status": "Open"
+          },
+          {
+            "port": 8080,
+            "service": "unknown",
+            "status": "Open"
+          }
+        ],
+        "sql_injection": [
+          {
+            "parameter": "N/A",
+            "payload": "N/A",
+            "vulnerable": false,
+            "evidence": "No query parameters found to test safely.",
+            "severity": "Low"
+          }
+        ],
+        "xss": [
+          {
+            "parameter": "N/A",
+            "payload": "N/A",
+            "vulnerable": false,
+            "evidence": "No query parameters found to test safely.",
+            "severity": "Low"
+          }
+        ],
+        "ssl": {
+          "host": "steamrip.com",
+          "port": 443,
+          "issuer": "countryName=US, organizationName=Google Trust Services, commonName=WE1",
+          "subject": "commonName=steamrip.com",
+          "expiry_date": "2026-09-14 04:05:29 UTC",
+          "days_remaining": 67,
+          "tls_version": "TLSv1.3",
+          "valid": true,
+          "expired": false,
+          "error": null
+        },
+        "risk_score": 40,
+        "risk_severity": "Medium",
+        "recommendations": [
+          "Add missing HTTP security headers such as CSP, HSTS, and X-Frame-Options.",
+          "Close unused open ports or restrict them with a firewall."
+        ],
+        "reports": {
+          "txt": "/output/web_report_steamrip_com_20260708_104320.txt",
+          "html": "/output/web_report_steamrip_com_20260708_104320.html",
+          "csv": "/output/web_report_steamrip_com_20260708_104320.csv",
+          "ppt": "/output/web_report_steamrip_com_20260708_104320.pptx"
+        },
+        "scan_duration": "1.7s"
+      }
+    }
+  ],
+  "admin_operator": [
+    {
+      "timestamp": "2026-07-10 21:18:34",
+      "target": "https://example.com",
+      "results": {
+        "target_url": "https://example.com",
+        "target_host": "example.com",
+        "scan_time": "2026-07-10 21:18:34",
+        "url_scan": {
+          "target": "https://example.com",
+          "valid": true,
+          "suspicious_indicators": [],
+          "status_code": 200,
+          "reason": "OK",
+          "final_url": "https://example.com/",
+          "redirects": [],
+          "headers": {
+            "Date": "Fri, 10 Jul 2026 15:48:35 GMT",
+            "Content-Type": "text/html",
+            "Transfer-Encoding": "chunked",
+            "Connection": "keep-alive",
+            "Server": "cloudflare",
+            "Last-Modified": "Wed, 01 Jul 2026 17:52:37 GMT",
+            "Allow": "GET, HEAD",
+            "Age": "5",
+            "Cf-Cache-Status": "HIT",
+            "Content-Encoding": "gzip",
+            "CF-RAY": "a190b6accd46d35e-FRA"
+          },
+          "server": "cloudflare",
+          "security_headers": {},
+          "missing_security_headers": [
+            "Content-Security-Policy",
+            "Strict-Transport-Security",
+            "X-Frame-Options",
+            "X-Content-Type-Options",
+            "Referrer-Policy",
+            "Permissions-Policy"
+          ],
+          "error": null
+        },
+        "port_scan": [
+          {
+            "port": 80,
+            "service": "http",
+            "status": "Open"
+          },
+          {
+            "port": 443,
+            "service": "https",
+            "status": "Open"
+          },
+          {
+            "port": 8080,
+            "service": "unknown",
+            "status": "Open"
+          }
+        ],
+        "sql_injection": [
+          {
+            "parameter": "N/A",
+            "payload": "N/A",
+            "vulnerable": false,
+            "evidence": "No query parameters found to test safely.",
+            "severity": "Low"
+          }
+        ],
+        "xss": [
+          {
+            "parameter": "N/A",
+            "payload": "N/A",
+            "vulnerable": false,
+            "evidence": "No query parameters found to test safely.",
+            "severity": "Low"
+          }
+        ],
+        "ssl": {
+          "host": "example.com",
+          "port": 443,
+          "issuer": "countryName=US, organizationName=SSL Corporation, commonName=Cloudflare TLS Issuing ECC CA 3",
+          "subject": "commonName=example.com",
+          "expiry_date": "2026-08-29 21:41:26 UTC",
+          "days_remaining": 50,
+          "tls_version": "TLSv1.3",
+          "valid": true,
+          "expired": false,
+          "error": null
+        },
+        "recon_scan": {
+          "subdomains": [
+            {
+              "subdomain": "www.example.com",
+              "ip": "104.20.23.154"
+            }
+          ],
+          "technologies": [
+            "Cloudflare"
+          ],
+          "server_headers": {
+            "Server": "cloudflare"
+          },
+          "ip_addresses": [
+            "104.20.23.154",
+            "172.66.147.243",
+            "2606:4700:90c5:72db:f264:64d:ef6b:ff98"
+          ]
+        },
+        "risk_score": 40,
+        "risk_severity": "Medium",
+        "recommendations": [
+          "Add missing HTTP security headers such as CSP, HSTS, and X-Frame-Options.",
+          "Close unused open ports or restrict them with a firewall."
+        ],
+        "reports": {
+          "txt": "/output/web_report_example_com_20260710_211838.txt",
+          "html": "/output/web_report_example_com_20260710_211838.html",
+          "csv": "/output/web_report_example_com_20260710_211838.csv",
+          "ppt": "/output/web_report_example_com_20260710_211838.pptx",
+          "pdf": "/output/web_report_example_com_20260710_211838.pdf"
+        },
+        "scan_duration": "3.5s"
+      }
+    }
+  ]
+}

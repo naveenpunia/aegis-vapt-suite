@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aegis VAPT Suite — Threat Assessment Console</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+    :root {
+      color-scheme: dark;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', Consolas, monospace;
+      
+      /* Sleek Cyber Dark Ops Palette */
+      --bg: #05060b;
+      --panel: rgba(10, 14, 23, 0.8);
+      --panel-soft: rgba(18, 25, 41, 0.5);
+      --field: #080b13;
+      --ink: #f8fafc;
+      --muted: #94a3b8;
+      --line: rgba(255, 255, 255, 0.05);
+      
+      /* Vibrant Glow Accents */
+      --accent: #0ea5e9;       /* Cyber Cyan */
+      --accent-dark: #0284c7;
+      --accent-soft: rgba(14, 165, 233, 0.12);
+      --violet: #a78bfa;       /* Purple Threat */
+      --amber: #f59e0b;        /* Warning Amber */
+      --red: #f43f5e;          /* Critical Red */
+      --green: #10b981;        /* Secure Green */
+      
+      --shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--ink);
+      background: var(--bg);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(14, 165, 233, 0.08), transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.06), transparent 40%);
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 32px;
+      margin: 20px auto;
+      width: min(1440px, calc(100% - 32px));
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px) saturate(180%);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo-mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(14, 165, 233, 0.3);
+      border-radius: 12px;
+      background: rgba(14, 165, 233, 0.1);
+      box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
+    }
+    .logo-mark svg {
+      width: 22px;
+      height: 22px;
+      color: var(--accent);
+    }
+
+    .brand-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .brand-copy span {
+      color: var(--accent);
+      font-size: 9.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 22px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .badge-cyber {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: rgba(14, 165, 233, 0.3);
+      box-shadow: 0 0 10px rgba(14, 165, 233, 0.1);
+    }
+
+    .user-info-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .icon-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 14px;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.02);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .icon-button:hover {
+      color: var(--ink);
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      box-shadow: 0 0 12px rgba(14, 165, 233, 0.15);
+    }
+
+    .btn-signout {
+      border-color: rgba(244, 63, 94, 0.3);
+    }
+    .btn-signout:hover {
+      color: #ffffff;
+      border-color: var(--red);
+      background: rgba(244, 63, 94, 0.1);
+      box-shadow: 0 0 12px rgba(244, 63, 94, 0.15);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 24px;
+      width: min(1440px, calc(100% - 32px));
+      margin: 0 auto 40px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px) saturate(180%);
+      padding: 24px;
+    }
+
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-self: start;
+    }
+
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      min-height: 80vh;
+    }
+
+    h2 {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--ink);
+      background: var(--field);
+      font-size: 13.5px;
+      font-family: var(--font-sans);
+      padding: 10px 14px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft), 0 0 10px rgba(14, 165, 233, 0.15);
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .scan-options-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .check-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 4px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel-soft);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.25s ease;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .check-btn input[type="checkbox"] {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--muted);
+      border-radius: 4px;
+      background: transparent;
+      outline: none;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .check-btn input[type="checkbox"]::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      transform: scale(0);
+      background-color: #ffffff;
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+      transition: 100ms transform ease-in-out;
+    }
+
+    .check-btn input[type="checkbox"]:checked {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .check-btn input[type="checkbox"]:checked::before {
+      transform: scale(1);
+    }
+
+    .check-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      background: rgba(14, 165, 233, 0.05);
+    }
+
+    .check-btn:has(input:checked) {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 46px;
+      border: none;
+      border-radius: 10px;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      font-weight: 800;
+      font-size: 14.5px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px -8px var(--accent);
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -6px var(--accent);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .statusbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel-soft);
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
+
+    .status-text {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+    }
+
+    .status-dot.scanning {
+      background: var(--amber);
+      box-shadow: 0 0 8px var(--amber);
+      animation: pulse 1.2s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { opacity: 0.5; }
+      to { opacity: 1; }
+    }
+
+    .progress-bar {
+      width: 150px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 99px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 99px;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .dashboard-tabs {
+      display: flex;
+      gap: 6px;
+      padding: 12px 24px;
+      background: rgba(22, 28, 45, 0.25);
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      color: var(--muted);
+      background: transparent;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .tab-btn.active {
+      color: #ffffff;
+      background: var(--accent-soft);
+      border-color: rgba(14, 165, 233, 0.3);
+      box-shadow: 0 0 10px rgba(14, 165, 233, 0.08);
+    }
+
+    .tab-pane {
+      display: none;
+      padding: 24px;
+      flex: 1;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: all 0.25s ease;
+    }
+
+    .tab-pane.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Overview Dial Section */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .gauge-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--panel-soft);
+    }
+
+    .gauge-container {
+      position: relative;
+      width: 140px;
+      height: 140px;
+    }
+
+    .gauge-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .gauge-bg {
+      stroke: rgba(255, 255, 255, 0.03);
+    }
+
+    .gauge-fill {
+      stroke: var(--green);
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s ease-in-out;
+      filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.2));
+    }
+
+    .gauge-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gauge-val {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .gauge-text small {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-box {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel-soft);
+      text-align: center;
+    }
+
+    .kpi-box small {
+      display: block;
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .kpi-box strong {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    /* Terminal Console */
+    .console-box {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #04060b;
+      font-family: var(--font-mono);
+      margin: auto 24px 24px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .console-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .console-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .console-dot:nth-child(1) { background: var(--red); }
+    .console-dot:nth-child(2) { background: var(--amber); }
+    .console-dot:nth-child(3) { background: var(--green); }
+
+    .console-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-left: 6px;
+    }
+
+    .console-body {
+      padding: 12px 16px;
+      height: 140px;
+      overflow-y: auto;
+      font-size: 11.5px;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .console-line {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .console-line.sys { color: #475569; }
+    .console-line.info { color: var(--accent); }
+    .console-line.success { color: var(--green); }
+    .console-line.warning { color: var(--amber); }
+    .console-line.error { color: var(--red); }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.01);
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    td code {
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--violet);
+    }
+
+    /* Badges */
+    .severity-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .severity-badge.Low { background: rgba(16, 185, 129, 0.1); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.2); }
+    .severity-badge.Medium { background: rgba(245, 158, 11, 0.1); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.2); }
+    .severity-badge.High { background: rgba(244, 63, 94, 0.1); color: var(--red); border: 1px solid rgba(244, 63, 94, 0.2); }
+    .severity-badge.Critical { background: rgba(167, 139, 250, 0.1); color: var(--violet); border: 1px solid rgba(167, 139, 250, 0.2); }
+
+    .downloads-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    /* Dynamic UI Empty States */
+    .empty-state {
+      padding: 60px 24px;
+      text-align: center;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .empty-state h3 {
+      font-size: 18px;
+      color: var(--ink);
+    }
+
+    /* History Sidebar & Drawer */
+    .history-drawer {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 400px;
+      height: 100vh;
+      background: var(--panel);
+      backdrop-filter: blur(24px);
+      border-left: 1px solid var(--line);
+      z-index: 1000;
+      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -20px 0 50px rgba(0, 0, 0, 0.5);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .history-drawer.active {
+      right: 0;
+    }
+
+    .history-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+    }
+
+    .history-list {
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .history-card {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel-soft);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .history-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .history-card h4 {
+      font-size: 13.5px;
+      margin-bottom: 4px;
+      word-break: break-all;
+    }
+
+    .history-card small {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .history-card-actions {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-delete-history {
+      background: transparent;
+      border: none;
+      color: var(--red);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      transition: opacity 0.2s;
+    }
+    .btn-delete-history:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+
+    /* Split-screen login interface style definitions */
+    .auth-container {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      background: #030408;
+      background-image: radial-gradient(circle at center, rgba(14, 165, 233, 0.15), transparent 60%);
+    }
+
+    .auth-left {
+      flex: 1.2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 60px;
+      border-right: 1px solid var(--line);
+      background: rgba(13, 17, 28, 0.4);
+    }
+
+    .auth-left-brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .auth-left-brand h3 {
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .auth-left-body {
+      max-width: 480px;
+      margin: auto 0;
+    }
+
+    .auth-left-body h1 {
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      letter-spacing: -0.03em;
+    }
+
+    .auth-left-body p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .auth-features-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .auth-feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .auth-feature-icon {
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 6px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+      border: 1px solid rgba(14, 165, 233, 0.2);
+    }
+
+    .auth-feature-text h4 {
+      font-size: 14.5px;
+      font-weight: 700;
+    }
+
+    .auth-feature-text p {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .auth-left-footer {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .auth-right {
+      flex: 0.8;
+      display: grid;
+      place-items: center;
+      padding: 40px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .auth-card h2 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .auth-card p {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .auth-card input[type="text"],
+    .auth-card input[type="password"] {
+      background: var(--field);
+      border: 1px solid var(--line);
+      color: #ffffff;
+      height: 48px;
+      padding: 0 16px;
+      border-radius: 10px;
+      font-size: 14.5px;
+      margin-bottom: 16px;
+      width: 100%;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .auth-card input[type="text"]:focus,
+    .auth-card input[type="password"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    .auth-card button {
+      width: 100%;
+      height: 48px;
+      background: var(--accent);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px -8px var(--accent);
+      transition: all 0.2s ease;
+    }
+
+    .auth-card button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -6px var(--accent);
+    }
+
+    .auth-error {
+      padding: 10px;
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      border-radius: 8px;
+      color: var(--red);
+      background: rgba(244, 63, 94, 0.05);
+      font-size: 12px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    @media (max-width: 900px) {
+      .auth-left { display: none; }
+      .auth-right { flex: 1; padding: 20px; }
+      main { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- AUTHENTICATION SCREEN -->
+  <div id="authScreen" class="auth-container">
+    <div class="auth-left">
+      <div class="auth-left-brand">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div>
+          <span style="font-size: 9.5px; color: var(--accent); font-weight: 800; display: block; letter-spacing: 0.12em;">AEGIS CYBERSECURITY</span>
+          <h3>Threat Operations Hub</h3>
+        </div>
+      </div>
+      
+      <div class="auth-left-body">
+        <span class="badge badge-cyber" style="margin-bottom: 16px;">VAPT Threat Control</span>
+        <h1>Secure Assessment Dashboard</h1>
+        <p>A safe security assessment and penetration testing suite built in Python, integrating technology profiling, SQL Injection indicators, XSS checks, SSL validations, and active subdomain mapping.</p>
+        
+        <div class="auth-features-list">
+          <div class="auth-feature-item">
+            <div class="auth-feature-icon">🛡️</div>
+            <div class="auth-feature-text">
+              <h4>Advanced Passive Scanners</h4>
+              <p>Execute safe, non-exploitative queries detecting SQLi, XSS, and open ports.</p>
+            </div>
+          </div>
+          <div class="auth-feature-item">
+            <div class="auth-feature-icon">📊</div>
+            <div class="auth-feature-text">
+              <h4>Detailed Multi-Format Reports</h4>
+              <p>Export security scan results instantly into HTML, PDF, PPTX, CSV, and JSON formats.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="auth-left-footer">
+        © 2026 Aegis Security Lab. Authorized Threat Control Workspace.
+      </div>
+    </div>
+    
+    <div class="auth-right">
+      <div class="auth-card">
+        <h2 id="authTitle">Operator Sign In</h2>
+        <p id="authDesc">Provide credentials to enter the security dashboard</p>
+
+        <div class="tabs-nav" style="display: flex; background: rgba(255,255,255,0.02); padding: 4px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--line);">
+          <button id="toggleLoginBtn" class="tab-btn active" style="flex:1; padding: 6px;" type="button">Log In</button>
+          <button id="toggleRegisterBtn" class="tab-btn" style="flex:1; padding: 6px;" type="button">Register</button>
+        </div>
+
+        <div id="authError" class="auth-error" style="display: none;"></div>
+
+        <form id="authForm">
+          <input id="usernameInput" type="text" placeholder="Username (e.g., Agent_Alpha)" required autocomplete="off">
+          <input id="passwordInput" type="password" placeholder="Access Password" required autocomplete="off">
+          <button id="submitAuthBtn" type="submit">Sign In</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKSPACE DASHBOARD -->
+  <div id="appWorkspace" style="display: none; flex-direction: column; width: 100%;">
+    <header>
+      <div class="brand">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div class="brand-copy">
+          <span>Security Operations Center</span>
+          <h1>Aegis VAPT Suite & Assessment Console</h1>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="user-info-badge">
+          <span>Operator: <b><span id="operatorNameText">...</span></b></span>
+        </div>
+        <button id="historyBtn" class="icon-button" type="button" title="View Scan History">
+          History Log
+        </button>
+        <button id="signoutBtn" class="icon-button btn-signout" type="button">
+          Sign Out
+        </button>
+        <span class="badge badge-cyber">Threat Hub</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- LEFT CONFIGURATION PANEL -->
+      <section class="panel left-panel">
+        <h2>Launch Assessment</h2>
+        <form id="scanForm">
+          <div class="field">
+            <label for="targets">Target URL / Host</label>
+            <input id="targets" name="targets" type="text" value="https://example.com" placeholder="e.g., https://example.com" required>
+            <p class="hint">Specify the target URL. Ensure you have authorization to test.</p>
+          </div>
+          
+          <div class="field">
+            <label for="ports">Ports to Scan</label>
+            <input id="ports" name="ports" type="text" value="80,443,8080">
+            <p class="hint">Enter comma-separated ports (e.g. 80,443) or range (1-1024).</p>
+          </div>
+
+          <div class="field">
+            <label for="timeout">HTTP Timeout (seconds)</label>
+            <input id="timeout" name="timeout" type="number" min="1" max="30" value="8">
+          </div>
+
+          <label style="margin-bottom: 6px; display: block;">Select Scan Audits</label>
+          <div class="scan-options-grid">
+            <label class="check-btn"><input type="checkbox" name="url" checked> URL</label>
+            <label class="check-btn"><input type="checkbox" name="portsScan" checked> Ports</label>
+            <label class="check-btn"><input type="checkbox" name="sql" checked> SQLi</label>
+            <label class="check-btn"><input type="checkbox" name="xss" checked> XSS</label>
+            <label class="check-btn"><input type="checkbox" name="ssl" checked> SSL</label>
+            <label class="check-btn"><input type="checkbox" name="recon" checked> Recon</label>
+          </div>
+
+          <button id="scanButton" class="btn-submit" type="submit">Start Assessment Scan</button>
+        </form>
+        
+        <div class="kpi-row" style="margin-top: 10px;">
+          <div class="kpi-box"><small>Mode</small><strong>Safe Scan</strong></div>
+          <div class="kpi-box"><small>Scope</small><strong>Passive</strong></div>
+          <div class="kpi-box"><small>Vetted</small><strong>OWASP</strong></div>
+        </div>
+      </section>
+
+      <!-- RIGHT DASHBOARD RESULTS -->
+      <section class="panel right-panel" style="padding: 0;">
+        <div class="statusbar">
+          <div id="statusText" class="status-text">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusLabel">Dashboard Idle</span>
+          </div>
+          <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="dashboard-tabs">
+          <button class="tab-btn active" onclick="switchTab('tabOverview')">Overview Dashboard</button>
+          <button class="tab-btn" onclick="switchTab('tabRecon')">Recon & Tech Info</button>
+          <button class="tab-btn" onclick="switchTab('tabPorts')">Open Ports</button>
+          <button class="tab-btn" onclick="switchTab('tabVulns')">Vulnerabilities (SQLi/XSS)</button>
+          <button class="tab-btn" onclick="switchTab('tabSsl')">SSL/TLS</button>
+        </div>
+
+        <div id="resultsContent" style="flex: 1; overflow-y: auto;">
+          <!-- OVERVIEW TAB -->
+          <div id="tabOverview" class="tab-pane active">
+            <div id="overviewEmpty" class="empty-state">
+              <h3>No Active Scan Loaded</h3>
+              <p>Configure a target and launch an assessment scan to view security posture results.</p>
+            </div>
+            
+            <div id="overviewData" style="display: none;" class="overview-grid">
+              <div class="gauge-card" id="riskCard" data-severity="Low">
+                <div class="gauge-container">
+                  <svg class="gauge-svg" viewBox="0 0 100 100">
+                    <circle class="gauge-bg" cx="50" cy="50" r="40" stroke-width="8" fill="none"/>
+                    <circle id="gaugeFill" class="gauge-fill" cx="50" cy="50" r="40" stroke-width="8" fill="none"
+                            stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
+                  </svg>
+                  <div class="gauge-text">
+                    <span class="gauge-val" id="riskScoreVal">0</span>
+                    <small>Risk Score</small>
+                  </div>
+                </div>
+                <span class="severity-badge Low" id="severityVal">Low</span>
+              </div>
+
+              <div>
+                <h3 style="margin-bottom: 8px;">Target Scan Details</h3>
+                <div class="kpi-row">
+                  <div class="kpi-box"><small>Target Domain</small><span id="targetDomainText" style="font-size: 13.5px; font-weight:700; word-break:break-all;">-</span></div>
+                  <div class="kpi-box"><small>Resolved IPs</small><span id="resolvedIpsText" style="font-size: 13.5px; font-weight:700;">-</span></div>
+                  <div class="kpi-box"><small>Audit Duration</small><span id="durationText" style="font-size: 13.5px; font-weight:700;">-</span></div>
+                </div>
+                
+                <h4 style="margin: 16px 0 8px; font-size:13.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted);">Actions & Downloads</h4>
+                <div class="downloads-container" id="reportLinksContainer">
+                  <!-- Links filled dynamically -->
+                </div>
+              </div>
+            </div>
+
+            <div id="recommendationsSection" style="margin-top: 30px; display: none;">
+              <h2>Remediation Action Items</h2>
+              <ul id="recommendationsList" style="margin-left: 20px; font-size:13.5px; line-height:1.7; color:var(--muted); display: grid; gap: 8px;">
+                <!-- Filled dynamically -->
+              </ul>
+            </div>
+          </div>
+
+          <!-- RECON TAB -->
+          <div id="tabRecon" class="tab-pane">
+            <h2>Passive Recon & Subdomain Mapping</h2>
+            <div id="reconEmpty" class="empty-state">
+              <h3>No Recon Data</h3>
+              <p>Launch scan with "Recon" check enabled to list subdomains and framework fingerprints.</p>
+            </div>
+            <div id="reconData" style="display: none;">
+              <h3 style="margin-top: 15px;">Fingerprinted Technologies</h3>
+              <div id="techContainer" style="display:flex; flex-wrap:wrap; gap:8px; margin: 10px 0 20px;">
+                <!-- Tags filled dynamically -->
+              </div>
+              
+              <h3 style="margin-top: 15px;">Discovered Subdomains (DNS mapping)</h3>
+              <table id="subdomainsTable">
+                <thead>
+                  <tr>
+                    <th>Subdomain Target</th>
+                    <th>Resolved IP</th>
+                  </tr>
+                </thead>
+                <tbody id="subdomainsBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- PORTS TAB -->
+          <div id="tabPorts" class="tab-pane">
+            <h2>Open TCP Services Check</h2>
+            <div id="portsEmpty" class="empty-state">
+              <h3>No Port Data</h3>
+              <p>Launch scan with "Ports" check enabled.</p>
+            </div>
+            <table id="portsTable" style="display: none;">
+              <thead>
+                <tr>
+                  <th>Port</th>
+                  <th>Service Profile</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="portsBody"></tbody>
+            </table>
+          </div>
+
+          <!-- VULNERABILITIES TAB -->
+          <div id="tabVulns" class="tab-pane">
+            <h2>Vulnerability Audit Feed</h2>
+            <div id="vulnsEmpty" class="empty-state">
+              <h3>No Vulnerability Data</h3>
+              <p>Launch scan with "SQLi" or "XSS" audits enabled.</p>
+            </div>
+            
+            <div id="vulnsData" style="display: none;">
+              <h3 style="margin-bottom: 10px;">SQL Injection (SQLi) Audit</h3>
+              <table id="sqliTable">
+                <thead>
+                  <tr>
+                    <th>Parameter Tested</th>
+                    <th>Payload Injected</th>
+                    <th>Audit Status</th>
+                    <th>Identified Evidence</th>
+                  </tr>
+                </thead>
+                <tbody id="sqliBody"></tbody>
+              </table>
+
+              <h3 style="margin-top: 30px; margin-bottom: 10px;">Cross-Site Scripting (XSS) Audit</h3>
+              <table id="xssTable">
+                <thead>
+                  <tr>
+                    <th>Parameter Tested</th>
+                    <th>Payload Injected</th>
+                    <th>Audit Status</th>
+                    <th>Identified Evidence</th>
+                  </tr>
+                </thead>
+                <tbody id="xssBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SSL TAB -->
+          <div id="tabSsl" class="tab-pane">
+            <h2>SSL/TLS Certificate Status</h2>
+            <div id="sslEmpty" class="empty-state">
+              <h3>No SSL Data</h3>
+              <p>Launch scan with "SSL" check enabled on HTTPS target.</p>
+            </div>
+            <div id="sslData" style="display: none;" class="kpi-row" style="display: grid; grid-template-columns: 1fr 1fr; gap:16px;">
+              <div class="kpi-box" style="text-align: left;"><small>Issuer</small><strong id="sslIssuer" style="font-size: 13px;">-</strong></div>
+              <div class="kpi-box" style="text-align: left;"><small>Subject CN</small><strong id="sslSubject" style="font-size: 13px;">-</strong></div>
+              <div class="kpi-box" style="text-align: left;"><small>Expiration Timeline</small><strong id="sslExpiry" style="font-size: 13px;">-</strong></div>
+              <div class="kpi-box" style="text-align: left;"><small>TLS Negotiation</small><strong id="sslTls" style="font-size: 13px;">-</strong></div>
+              <div class="kpi-box" style="text-align: left;"><small>Validation Result</small><strong id="sslValid" style="font-size: 13px;">-</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONSOLE -->
+        <div class="console-box">
+          <div class="console-header">
+            <div class="console-dot"></div>
+            <div class="console-dot"></div>
+            <div class="console-dot"></div>
+            <div class="console-title">Diagnostic Audit Terminal</div>
+          </div>
+          <div id="consoleBody" class="console-body">
+            <div class="console-line sys">[System] Controller Idle. Dashboard terminal ready.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- HISTORY DRAWER -->
+  <div id="historyDrawer" class="history-drawer">
+    <div class="history-header">
+      <h3>Operator History Log</h3>
+      <button class="icon-button" onclick="toggleHistory(false)" style="min-width: unset; width: 30px; height: 30px; border-radius: 50%; padding:0;">×</button>
+    </div>
+    <div id="historyList" class="history-list">
+      <!-- Cards populated dynamically -->
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    let currentOperator = '';
+
+    // View initialization
+    document.addEventListener("DOMContentLoaded", () => {
+      // Check session storage
+      const savedUser = sessionStorage.getItem("operator_user");
+      if (savedUser) {
+        setOperatorSession(savedUser);
+      } else {
+        document.getElementById("authScreen").style.display = "flex";
+        document.getElementById("appWorkspace").style.display = "none";
+      }
+    });
+
+    // Sign In / Registration Toggle
+    const btnLoginTab = document.getElementById("toggleLoginBtn");
+    const btnRegisterTab = document.getElementById("toggleRegisterBtn");
+    const submitBtn = document.getElementById("submitAuthBtn");
+    const authTitle = document.getElementById("authTitle");
+    const authDesc = document.getElementById("authDesc");
+    let isRegisterMode = false;
+
+    btnLoginTab.addEventListener("click", () => {
+      isRegisterMode = false;
+      btnLoginTab.classList.add("active");
+      btnRegisterTab.classList.remove("active");
+      authTitle.innerText = "Operator Sign In";
+      authDesc.innerText = "Provide credentials to enter the security dashboard";
+      submitBtn.innerText = "Sign In";
+      clearAuthError();
+    });
+
+    btnRegisterTab.addEventListener("click", () => {
+      isRegisterMode = true;
+      btnRegisterTab.classList.add("active");
+      btnLoginTab.classList.remove("active");
+      authTitle.innerText = "Register New Operator";
+      authDesc.innerText = "Register a local operator signature to record audits";
+      submitBtn.innerText = "Register Operator";
+      clearAuthError();
+    });
+
+    function setAuthError(msg) {
+      const err = document.getElementById("authError");
+      err.innerText = msg;
+      err.style.display = "block";
+    }
+
+    function clearAuthError() {
+      document.getElementById("authError").style.display = "none";
+    }
+
+    // Submit Auth Form
+    document.getElementById("authForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearAuthError();
+      const username = document.getElementById("usernameInput").value.trim();
+      const password = document.getElementById("passwordInput").value;
+
+      const endpoint = isRegisterMode ? "/api/register" : "/api/login";
+      const payload = isRegisterMode 
+        ? { username, password } 
+        : { loginId: username, password };
+
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          throw new Error(data.error || "Auth failed");
+        } else {
+          if (isRegisterMode) {
+            isRegisterMode = false;
+            btnLoginTab.click();
+            setAuthError("Registration successful! Sign in with your password.");
+            document.getElementById("authError").style.color = "var(--green)";
+            document.getElementById("authError").style.borderColor = "rgba(16, 185, 129, 0.2)";
+            document.getElementById("authError").style.background = "rgba(16, 185, 129, 0.05)";
+          } else {
+            setOperatorSession(data.username);
+          }
+        }
+      } catch (err) {
+        // STATIC FALLBACK DEMO SIGNIN
+        printConsole("[System] Server endpoint offline. Entering static client demo mode.", 'warning');
+        if (isRegisterMode) {
+          isRegisterMode = false;
+          btnLoginTab.click();
+          setAuthError("Demo Mode: Registration successful! Log in using your password.");
+          document.getElementById("authError").style.color = "var(--green)";
+        } else {
+          setOperatorSession(username || "guest_operator");
+        }
+      }
+    });
+
+    function setOperatorSession(username) {
+      currentOperator = username;
+      sessionStorage.setItem("operator_user", username);
+      document.getElementById("operatorNameText").innerText = username;
+      document.getElementById("authScreen").style.display = "none";
+      document.getElementById("appWorkspace").style.display = "flex";
+      printConsole(`[System] Operator '${username}' logged in successfully. Console ready.`, 'success');
+      
+      // Cleanup inputs
+      document.getElementById("usernameInput").value = '';
+      document.getElementById("passwordInput").value = '';
+    }
+
+    // Sign Out
+    document.getElementById("signoutBtn").addEventListener("click", () => {
+      sessionStorage.removeItem("operator_user");
+      currentOperator = '';
+      document.getElementById("authScreen").style.display = "flex";
+      document.getElementById("appWorkspace").style.display = "none";
+    });
+
+    // Console Logging
+    function printConsole(text, type='sys') {
+      const consoleBody = document.getElementById("consoleBody");
+      const line = document.createElement("div");
+      line.className = `console-line ${type}`;
+      const timeStr = new Date().toLocaleTimeString();
+      line.innerHTML = `<span style="color:#64748b;">[${timeStr}]</span> ${text}`;
+      consoleBody.appendChild(line);
+      consoleBody.scrollTop = consoleBody.scrollHeight;
+    }
+
+    // Tabs switching
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-pane").forEach(pane => pane.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+      
+      document.getElementById(tabId).classList.add("active");
+      
+      // Find matching button text
+      const btns = Array.from(document.querySelectorAll(".tab-btn"));
+      const btnMap = {
+        'tabOverview': 'Overview Dashboard',
+        'tabRecon': 'Recon & Tech Info',
+        'tabPorts': 'Open Ports',
+        'tabVulns': 'Vulnerabilities (SQLi/XSS)',
+        'tabSsl': 'SSL/TLS'
+      };
+      const matchingBtn = btns.find(btn => btn.innerText === btnMap[tabId]);
+      if (matchingBtn) matchingBtn.classList.add("active");
+    }
+
+    // Launch Scan
+    document.getElementById("scanForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const target = document.getElementById("targets").value.trim();
+      const ports = document.getElementById("ports").value.trim();
+      const timeout = parseInt(document.getElementById("timeout").value);
+      
+      const form = e.target;
+      const options = {
+        url: form.elements['url'].checked,
+        ports: form.elements['portsScan'].checked,
+        sql: form.elements['sql'].checked,
+        xss: form.elements['xss'].checked,
+        ssl: form.elements['ssl'].checked,
+        recon: form.elements['recon'].checked
+      };
+
+      if (!options.url && !options.ports && !options.sql && !options.xss && !options.ssl && !options.recon) {
+        alert("Please select at least one audit scan checkbox.");
+        return;
+      }
+
+      // Start animations
+      document.getElementById("scanButton").disabled = true;
+      document.getElementById("statusDot").className = "status-dot scanning";
+      document.getElementById("statusLabel").innerText = "Scanning target host...";
+      document.getElementById("progressFill").style.width = "25%";
+      
+      printConsole(`[Scan] Initializing security checks against: ${target}`, 'info');
+      printConsole(`[Scan] Target options -> timeout: ${timeout}s, ports: ${ports || 'default'}`, 'sys');
+
+      try {
+        const payload = { target, ports, timeout, options };
+        const res = await fetch("/api/scan", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "X-Operator-User": currentOperator
+          },
+          body: JSON.stringify(payload)
+        });
+        
+        document.getElementById("progressFill").style.width = "75%";
+        const data = await res.json();
+        
+        if (!res.ok || !data.ok) {
+          throw new Error(data.error || "Scan failed");
+        }
+
+        printConsole(`[Scan] Received audit reports from scanning engine. Formatting dashboard...`, 'success');
+        renderResults(data.results);
+        
+        document.getElementById("progressFill").style.width = "100%";
+        setTimeout(() => {
+          document.getElementById("progressFill").style.width = "0%";
+        }, 1000);
+        
+        printConsole(`[System] Audit complete for target: ${data.results.target_url}`, 'success');
+
+      } catch (err) {
+        // STATIC FALLBACK SCAN LOGIC FOR DEMO PREVIEW (e.g. Github Pages)
+        printConsole(`[System] Server offline. Launching simulated scan audits...`, 'warning');
+        simulateScanProgress(target, ports, options);
+      }
+    });
+
+    // Simulate Scan Progress for Static Deployment
+    function simulateScanProgress(target, portsInput, options) {
+      const steps = [
+        { progress: 25, log: "[Scan] Resolving host DNS mapping registers...", type: "sys" },
+        { progress: 45, log: "[Recon] Mapped subdomain targets: api.example.com, dev.example.com", type: "info" },
+        { progress: 60, log: "[Scan] Handshaking TCP network ports: " + (portsInput || "80,443"), type: "sys" },
+        { progress: 75, log: "[Ports] TCP port 80 [Open], port 443 [Open], port 8080 [Closed]", type: "success" },
+        { progress: 85, log: "[Scan] Initiating safe SQL injection & XSS reflected audits...", type: "sys" },
+        { progress: 95, log: "[SSL] Resolved peer certificate dates (TLSv1.3 valid)", type: "info" },
+        { progress: 100, log: "[System] Assessment complete for simulated target: " + target, type: "success" }
+      ];
+
+      let idx = 0;
+      const interval = setInterval(() => {
+        if (idx < steps.length) {
+          const step = steps[idx];
+          document.getElementById("progressFill").style.width = `${step.progress}%`;
+          printConsole(step.log, step.type);
+          idx++;
+        } else {
+          clearInterval(interval);
+          document.getElementById("scanButton").disabled = false;
+          document.getElementById("statusDot").className = "status-dot";
+          document.getElementById("statusLabel").innerText = "Dashboard Idle";
+          document.getElementById("progressFill").style.width = "0%";
+          
+          // Render Simulated results
+          const domain = target.replace(/^https?:\/\//, '').split('/')[0];
+          const mockResults = {
+            target_url: target,
+            target_host: domain,
+            scan_duration: "3.24 seconds",
+            risk_score: 25,
+            risk_severity: "Medium",
+            recon_scan: {
+              ip_addresses: ["104.26.10.19", "172.67.74.152"],
+              technologies: ["Cloudflare Web WAF", "Nginx Engine", "HTTPS Encryption", "JSON API Interface"],
+              subdomains: [
+                { subdomain: "api." + domain, ip: "104.26.11.19" },
+                { subdomain: "dev." + domain, ip: "172.67.74.152" }
+              ]
+            },
+            port_scan: [
+              { port: 80, service: "HTTP", status: "Open" },
+              { port: 443, service: "HTTPS", status: "Open" }
+            ],
+            sql_injection: [
+              { parameter: "cat", payload: "1' or 1=1 --", vulnerable: false, evidence: "Safe: query parameters validated using SQL patterns." }
+            ],
+            xss: [
+              { parameter: "query", payload: "<script>alert(1)</script>", vulnerable: false, evidence: "Safe: parameters filtered, special symbols encoded." }
+            ],
+            ssl: {
+              host: domain,
+              issuer: "US, Cloudflare Inc, Cloudflare TLS ECC CA",
+              subject: domain,
+              expiry_date: "2026-12-31",
+              days_remaining: 174,
+              tls_version: "TLSv1.3",
+              valid: true
+            },
+            recommendations: [
+              "Harden security policies by adding Strict-Transport-Security headers.",
+              "Restrict open staging domains by blocking directory index routes."
+            ],
+            reports: {
+              "txt": "#", "csv": "#", "html": "#"
+            }
+          };
+          renderResults(mockResults);
+        }
+      }, 500);
+    }
+
+    // Render results in UI
+    function renderResults(results) {
+      document.getElementById("overviewEmpty").style.display = "none";
+      document.getElementById("overviewData").style.display = "grid";
+      document.getElementById("recommendationsSection").style.display = "block";
+
+      const score = results.risk_score || 0;
+      const severity = results.risk_severity || "Low";
+      document.getElementById("riskScoreVal").innerText = score;
+      
+      const sevBadge = document.getElementById("severityVal");
+      sevBadge.innerText = severity;
+      sevBadge.className = `severity-badge ${severity}`;
+      document.getElementById("riskCard").setAttribute("data-severity", severity);
+      
+      const offset = 251.2 - (251.2 * score) / 100;
+      document.getElementById("gaugeFill").style.strokeDashoffset = offset;
+      
+      const severityColors = { 'Low': '#10b981', 'Medium': '#f59e0b', 'High': '#f43f5e', 'Critical': '#a78bfa' };
+      document.getElementById("gaugeFill").style.stroke = severityColors[severity] || '#10b981';
+
+      document.getElementById("targetDomainText").innerText = results.target_host;
+      document.getElementById("durationText").innerText = results.scan_duration || "N/A";
+      
+      const recon = results.recon_scan || { technologies: [], subdomains: [] };
+      document.getElementById("resolvedIpsText").innerText = (recon.ip_addresses && recon.ip_addresses.length) ? recon.ip_addresses.join(", ") : "-";
+      
+      if ((recon.technologies && recon.technologies.length > 0) || (recon.subdomains && recon.subdomains.length > 0)) {
+        document.getElementById("reconEmpty").style.display = "none";
+        document.getElementById("reconData").style.display = "block";
+        
+        const techContainer = document.getElementById("techContainer");
+        techContainer.innerHTML = '';
+        if (recon.technologies && recon.technologies.length) {
+          recon.technologies.forEach(tech => {
+            const tag = document.createElement("span");
+            tag.className = "badge badge-cyber";
+            tag.innerText = tech;
+            techContainer.appendChild(tag);
+          });
+        } else {
+          techContainer.innerHTML = '<span style="color:var(--muted); font-size:12px;">No technology tags parsed.</span>';
+        }
+
+        const subBody = document.getElementById("subdomainsBody");
+        subBody.innerHTML = '';
+        if (recon.subdomains && recon.subdomains.length) {
+          recon.subdomains.forEach(sub => {
+            const row = `<tr><td><b>${sub.subdomain}</b></td><td><code>${sub.ip}</code></td></tr>`;
+            subBody.insertAdjacentHTML('beforeend', row);
+          });
+        } else {
+          subBody.innerHTML = '<tr><td colspan="2" style="text-align: center; color: var(--muted);">No active subdomains resolved.</td></tr>';
+        }
+      } else {
+        document.getElementById("reconEmpty").style.display = "flex";
+        document.getElementById("reconData").style.display = "none";
+      }
+
+      const ports = results.port_scan || [];
+      if (ports.length > 0) {
+        document.getElementById("portsEmpty").style.display = "none";
+        document.getElementById("portsTable").style.display = "table";
+        const portsBody = document.getElementById("portsBody");
+        portsBody.innerHTML = '';
+        ports.forEach(item => {
+          const statusClass = item.status === 'Open' ? 'Low' : 'High';
+          const row = `<tr>
+            <td><code>${item.port}</code></td>
+            <td>${item.service}</td>
+            <td><span class="severity-badge ${statusClass}">${item.status}</span></td>
+          </tr>`;
+          portsBody.insertAdjacentHTML('beforeend', row);
+        });
+      } else {
+        document.getElementById("portsEmpty").style.display = "flex";
+        document.getElementById("portsTable").style.display = "none";
+      }
+
+      const sqli = results.sql_injection || [];
+      const xss = results.xss || [];
+      if (sqli.length > 0 || xss.length > 0) {
+        document.getElementById("vulnsEmpty").style.display = "none";
+        document.getElementById("vulnsData").style.display = "block";
+
+        const sqliBody = document.getElementById("sqliBody");
+        sqliBody.innerHTML = '';
+        sqli.forEach(row => {
+          const label = row.vulnerable ? 'Vulnerable' : 'Secure';
+          const badgeClass = row.vulnerable ? 'High' : 'Low';
+          const rowHtml = `<tr>
+            <td><code>${row.parameter}</code></td>
+            <td><code>${row.payload}</code></td>
+            <td><span class="severity-badge ${badgeClass}">${label}</span></td>
+            <td style="color:var(--muted); font-size:12px;">${row.evidence}</td>
+          </tr>`;
+          sqliBody.insertAdjacentHTML('beforeend', rowHtml);
+        });
+
+        const xssBody = document.getElementById("xssBody");
+        xssBody.innerHTML = '';
+        xss.forEach(row => {
+          const label = row.vulnerable ? 'Vulnerable' : 'Secure';
+          const badgeClass = row.vulnerable ? 'High' : 'Low';
+          const rowHtml = `<tr>
+            <td><code>${row.parameter}</code></td>
+            <td><code>${row.payload}</code></td>
+            <td><span class="severity-badge ${badgeClass}">${label}</span></td>
+            <td style="color:var(--muted); font-size:12px;">${row.evidence}</td>
+          </tr>`;
+          xssBody.insertAdjacentHTML('beforeend', rowHtml);
+        });
+      } else {
+        document.getElementById("vulnsEmpty").style.display = "flex";
+        document.getElementById("vulnsData").style.display = "none";
+      }
+
+      const ssl = results.ssl || {};
+      if (ssl.host && !ssl.error) {
+        document.getElementById("sslEmpty").style.display = "none";
+        document.getElementById("sslData").style.display = "grid";
+        document.getElementById("sslIssuer").innerText = ssl.issuer || "Unknown";
+        document.getElementById("sslSubject").innerText = ssl.subject || "Unknown";
+        document.getElementById("sslExpiry").innerText = `${ssl.expiry_date} (${ssl.days_remaining} days remaining)`;
+        document.getElementById("sslTls").innerText = ssl.tls_version || "Unknown";
+        document.getElementById("sslValid").innerText = ssl.valid ? "VALID CERTIFICATE" : "INVALID CERTIFICATE";
+        document.getElementById("sslValid").style.color = ssl.valid ? "var(--green)" : "var(--red)";
+      } else {
+        document.getElementById("sslEmpty").style.display = "flex";
+        document.getElementById("sslData").style.display = "none";
+        if (ssl.error) {
+          printConsole(`[SSL] Checked SSL host status: ${ssl.error}`, 'warning');
+        }
+      }
+
+      const recs = results.recommendations || [];
+      const recList = document.getElementById("recommendationsList");
+      recList.innerHTML = '';
+      recs.forEach(item => {
+        recList.insertAdjacentHTML('beforeend', `<li>${item}</li>`);
+      });
+
+      const linksContainer = document.getElementById("reportLinksContainer");
+      linksContainer.innerHTML = '';
+      const reports = results.reports || {};
+      Object.keys(reports).forEach(fmt => {
+        if (reports[fmt] !== "#") {
+          const link = document.createElement("a");
+          link.href = reports[fmt];
+          link.className = "icon-button";
+          link.target = "_blank";
+          link.innerText = `Download ${fmt.toUpperCase()} Report`;
+          linksContainer.appendChild(link);
+        }
+      });
+    }
+
+    // Toggle History Drawer
+    async function toggleHistory(show) {
+      const drawer = document.getElementById("historyDrawer");
+      if (show) {
+        drawer.classList.add("active");
+        try {
+          const res = await fetch("/api/history", {
+            headers: { "X-Operator-User": currentOperator }
+          });
+          const data = await res.json();
+          if (res.ok && data.ok) {
+            renderHistoryList(data.history);
+          }
+        } catch (e) {
+          printConsole("[History] Backend offline. Timeline history loaded from memory.", 'warning');
+          renderHistoryList([]);
+        }
+      } else {
+        drawer.classList.remove("active");
+      }
+    }
+
+    document.getElementById("historyBtn").addEventListener("click", () => toggleHistory(true));
+
+    function renderHistoryList(history) {
+      const list = document.getElementById("historyList");
+      list.innerHTML = '';
+      if (!history || history.length === 0) {
+        list.innerHTML = '<div class="empty-state"><p>No previous scans found. Log targets to check timelines.</p></div>';
+        return;
+      }
+
+      history.reverse().forEach((item) => {
+        const ts = item.timestamp;
+        const target = item.target;
+        const results = item.results || {};
+        const score = results.risk_score || 0;
+        const severity = results.risk_severity || "Low";
+        
+        const card = document.createElement("div");
+        card.className = "history-card";
+        card.innerHTML = `
+          <h4>${target}</h4>
+          <small>${ts}</small>
+          <div class="history-card-actions">
+            <span class="severity-badge ${severity}">${score} / ${severity}</span>
+            <button class="btn-delete-history" onclick="deleteHistoryItem('${ts}', event)">Delete</button>
+          </div>
+        `;
+        card.addEventListener("click", () => {
+          printConsole(`[History] Loaded previous scan targets log from: ${ts}`, 'info');
+          renderResults(results);
+          toggleHistory(false);
+          switchTab('tabOverview');
+        });
+        list.appendChild(card);
+      });
+    }
+
+    async function deleteHistoryItem(timestamp, event) {
+      event.stopPropagation();
+      if (!confirm("Are you sure you want to delete this scan from history?")) return;
+      try {
+        const res = await fetch("/api/delete_history", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "X-Operator-User": currentOperator
+          },
+          body: JSON.stringify({ timestamp })
+        });
+        const data = await res.json();
+        if (res.ok && data.ok) {
+          printConsole(`[History] Deleted target scan logs: ${timestamp}`, 'warning');
+          toggleHistory(true);
+        }
+      } catch (e) {
+        alert("Failed to delete history log.");
+      }
+    }
+  </script>
+</body>
+</html>

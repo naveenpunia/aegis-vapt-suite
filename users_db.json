@@ -1,0 +1,26 @@
+{
+  "admin": {
+    "username": "admin",
+    "email": "admin@securelab.local",
+    "password_hash": "5c06eb3d5a05a19f49476d694ca81a36344660e9d5b98e3d6a6630f31c2422e7",
+    "created_at": "2026-07-08 09:17:41"
+  },
+  "Lucky": {
+    "username": "Lucky",
+    "email": "Lucky@securelab.local",
+    "password_hash": "99cbd61d8b67c05347cf28e28bdddec2b2b6c723efdee3d5af514b57ef0d4d98",
+    "created_at": "2026-07-08 09:19:45"
+  },
+  "admin_operator": {
+    "username": "admin_operator",
+    "email": "admin_operator@securelab.local",
+    "password_hash": "513d7163deebfb1098ce8bc080742658fa210b13bfe0b365520fdebe2b519016",
+    "created_at": "2026-07-10 21:17:40"
+  },
+  "Naveen": {
+    "username": "Naveen",
+    "email": "Naveen@securelab.local",
+    "password_hash": "0e523bf66a60696f4e803593191934758199b874b144ee0bfd8687bc64167a77",
+    "created_at": "2026-07-10 21:46:11"
+  }
+}
